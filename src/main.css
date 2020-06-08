@@ -1,0 +1,21 @@
+.App {
+  width: 100%;
+  padding: 0px;
+}
+
+.App #sideNav {
+  background: #7386D5;
+  color: #fff;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  margin: 0px;
+}
+
+.App #sideNav button {
+  color: black;
+}
+
+.App .DataSection {
+  padding-right: 250px;
+}
+/*# sourceMappingURL=main.css.map */
