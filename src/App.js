@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
+import {Container,Row, Col, Button, NavDropdown} from 'react-bootstrap'
+import Nav from 'react-bootstrap/Nav'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import DropdownItem from 'react-bootstrap/DropdownItem';
+
 import './main.css'
+
 // a const array of us states
   const US_STATES = ["Alaska",
                   "Alabama",
@@ -63,19 +69,39 @@ import './main.css'
 
 const ListOfUSStates = (props) =>{
   let listOfStates = US_STATES.map((value,index) => {
-    return <li className="usState" key={index}><button className="btn btn-link" onClick={() => props.setStateName(value)}>{value}</button></li>
+    return(
+      <DropdownItem key={index}>
+        <Button onClick={() => props.setStateName(value)}>
+          {value}
+        </Button>
+      </DropdownItem>
+    )
   })
 
-  return(listOfStates)
+  return(
+    <NavDropdown title={"States"}>
+        {listOfStates}
+    </NavDropdown>
+  )
 
 }
 
-const ListOfEducationLevels = (props) =>{
-  let educationLevel = EDUCATION_LEVEL.map((value,index) =>{
-    return <li className="educationLevel" key={index}><button className="btn btn-link">{value}</button></li>
+const ListOfEducationLevels = (props) => {
+  let educationLevel = EDUCATION_LEVEL.map((value,index) => {
+    return (
+      <DropdownItem key={index}>
+        <Button onClick={() => props.setEducationLevel(value)}>
+          {value}
+        </Button>
+      </DropdownItem>
+    )
   })
 
-  return(educationLevel)
+  return(
+    <NavDropdown title={"Education Level"} >
+      {educationLevel}
+    </NavDropdown>
+  )
 }
 
 /*
@@ -84,36 +110,22 @@ const ListOfEducationLevels = (props) =>{
 const SideNav = (props) =>{
   
   return(
-    <div className="col" id="sideNav">
-      <h3 className="border-bottom">DashBoard</h3>
-       <ul className="nav flex-column fixed-left ">
-        <li className="nav-item ">
-          <h4 className="dropdown-toggle" data-toggle="collapse" href="#statesList" role="button" aria-expanded="false" aria-controls="statesList">
-            States
-          </h4>
-        </li>
-        <div className="collapse" id="statesList">
-            <ListOfUSStates setStateName={(stateName) => props.setStateName(stateName)}/>
-        </div>
-        <li>
-          <h4 className="dropdown-toggle" data-toggle="collapse" href="#EducationLevel" role="button" aria-expanded="false" aria-controls="EducationLevel">
-            Education Level
-          </h4>
-        </li>
-        <div className="collapse" id="EducationLevel">
-           
-        </div>
-      </ul>
-      
-    </div>
+    <Col xs={6} md={4}>
+      <h3 id="SideNav">DashBoard</h3>
+      <Nav className="flex-column">
+        <ListOfUSStates setStateName={(value) => props.setStateName(value)}></ListOfUSStates>
+        <ListOfEducationLevels setEducationLevel={(value) => props.setEducationLevel(value)}></ListOfEducationLevels>
+      </Nav>
+    </Col>
   )
 }
 
 const DataSection = (props) =>{
   return (
-    <div className="col" id="DataSection">
+    <Col xs={12} md={8}>
       <h1>{props.title}</h1>
-    </div>
+      <h6>{props.level}</h6>
+    </Col>
   )
 }
 
@@ -125,15 +137,20 @@ const DataCard = () =>{
  * root component
  */
 function App() {
-  let [stateName,setStateName] = useState('Georgia')
+  let [stateName,setStateName] = useState('Georgia');
+  let [educationlevel,setEducationLevel] = useState('k-12')
   
   return (
-    <div className="App container-fluid">
-      <div id="row">
-        <SideNav setStateName={(value) => setStateName(value)}></SideNav>
-        <DataSection title={stateName}></DataSection>
-      </div>
-    </div>
+    <Container fluid>
+      <Row>
+        <SideNav 
+          setStateName={(value) => setStateName(value)}
+          setEducationLevel={(value) => setEducationLevel(value)}
+          >
+        </SideNav>
+        <DataSection title={stateName} level={educationlevel}></DataSection>
+      </Row>
+    </Container>
   );
 }
 

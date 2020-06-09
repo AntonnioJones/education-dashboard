@@ -1,8 +1,7 @@
 .App{
-    width: 100%;
-    padding:0px;
+    color:green;
 
-   #sideNav{
+   .SideNav{
        background: #7386D5;
        color: #fff;
        transition: all 0.3s;
@@ -10,9 +9,5 @@
        button{
            color: black;
        }
-   }
-   
-   .DataSection{
-       padding-right:250px;
    }
 }
