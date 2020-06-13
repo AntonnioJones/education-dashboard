@@ -1,16 +1,32 @@
-.App {
-  color: green;
+#root {
+  height: 100vh;
 }
 
-.App .SideNav {
-  background: #7386D5;
-  color: #fff;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  margin: 0px;
+#root #App #NavBar {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
-.App .SideNav button {
-  color: black;
+#root #App #DataSection {
+  padding-top: 10vh;
+}
+
+#root #App #DataSection #DataHeader {
+  text-align: center;
+}
+
+#root #App #DataSection #DataCards {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+#root #App #DataSection #DataCards .DataCard {
+  margin-top: 10px;
+  margin-left: 5px;
+  width: 16rem;
 }
 /*# sourceMappingURL=main.css.map */

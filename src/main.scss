@@ -1,13 +1,28 @@
-.App{
-    color:green;
+#root{
+    height: 100vh;
+    #App{
+        
+        #NavBar{
+            justify-content: space-between;
+        }
 
-   .SideNav{
-       background: #7386D5;
-       color: #fff;
-       transition: all 0.3s;
-        margin:0px;
-       button{
-           color: black;
-       }
-   }
+        #DataSection{
+           padding-top: 10vh;
+
+           #DataHeader{
+               text-align: center;
+           }
+
+           #DataCards{
+               display: flex;
+                flex-wrap: wrap;
+               .DataCard{
+                   margin-top: 10px;
+                   margin-left: 5px;
+                   width: 16rem;
+               }
+           }
+        }
+    }
+   
 }
