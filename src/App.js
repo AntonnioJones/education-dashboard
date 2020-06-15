@@ -9,7 +9,7 @@ import './main.css'
 import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
 
 // a const array of us states
-  const US_STATES = ["Alaska",
+const US_STATES = ["Alaska",
                   "Alabama",
                   "Arkansas",
                   "Arizona",
@@ -63,8 +63,10 @@ import NavbarCollapse from 'react-bootstrap/NavbarCollapse';
                   "Wyoming"]
 
   //an array of education levels
-  const EDUCATION_LEVEL = ["K-12","bachelor","Masters","Doctorial"];
-  
+const EDUCATION_LEVEL = ["K-12","bachelor","Masters","Doctorial"];
+ 
+//The Api endpoint
+const API_URL = "https://fnx9a4pb6g.execute-api.us-east-1.amazonaws.com/beta/highschool/";
 
 const ListOfUSStates = (props) =>{
   //a state variable that controls where the modal is visible
@@ -79,6 +81,7 @@ const ListOfUSStates = (props) =>{
   */
   const updateUSState = (value) =>{
     props.setUSState(value);
+    getHighSchoolData(value.toLowerCase());
     closeMenu();
   }
 
@@ -89,6 +92,7 @@ const ListOfUSStates = (props) =>{
         </Button>
     )
   })
+  
 
   return(
     <>
@@ -202,6 +206,23 @@ const DataCard = (props) =>{
       </Card.Body>
     </Card>
   )
+}
+
+/**
+ * used to get information on high school data
+ * @param {*} usState 
+ */
+const getHighSchoolData = (usState) =>{
+  //create a request
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange=(e)=>{
+    if (e.status == 200) {
+      console.log(this.responseText);
+    }
+  }
+  xhttp.open("GET","https://fnx9a4pb6g.execute-api.us-east-1.amazonaws.com/beta/highschool/alaska");
+  xhttp.send();
+  
 }
 
 /**
