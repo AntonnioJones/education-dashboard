@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
-import {Container,Row, Col, Button, NavDropdown,NavLink, NavItem, CardColumns, Dropdown, Navbar, NavbarBrand, Modal} from 'react-bootstrap'
+import React, {createRef, useState} from 'react';
+import {Container, Button, NavItem, Navbar, NavbarBrand, Modal} from 'react-bootstrap'
 import Nav from 'react-bootstrap/Nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DropdownItem from 'react-bootstrap/DropdownItem';
 import Card from 'react-bootstrap/Card'
 
 import './main.css'
@@ -144,8 +143,9 @@ const ListOfEducationLevels = (props) => {
         Education
       </NavItem>
 
+
       <Modal show={visible} onHide={closeMenu}>
-        <Modal.Header>
+        <Modal.Header >
           <Modal.Title>Choose an Education Level</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -213,15 +213,14 @@ const DataCard = (props) =>{
  * @param {*} usState 
  */
 const getHighSchoolData = (usState) =>{
-  //create a request
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange=(e)=>{
-    if (e.status == 200) {
-      console.log(this.responseText);
+  fetch(API_URL,{
+    method: 'GET',
+    headers:{
+      'X-Requested-With': 'XMLHttpRequest'
     }
-  }
-  xhttp.open("GET","https://fnx9a4pb6g.execute-api.us-east-1.amazonaws.com/beta/highschool/alaska");
-  xhttp.send();
+  }).then(res => res.json())
+  .then(response => console.log(response))
+  .catch(error => console.error(error));
   
 }
 
