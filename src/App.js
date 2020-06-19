@@ -1,4 +1,4 @@
-import React, {createRef, useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import {Container, Button, NavItem, Navbar, NavbarBrand, Modal} from 'react-bootstrap'
 import Nav from 'react-bootstrap/Nav'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,11 +15,10 @@ const US_STATES = ["Alaska",
                   "California",
                   "Colorado",
                   "Connecticut",
-                  "District of Columbia",
+                  "DC",
                   "Delaware",
                   "Florida",
                   "Georgia",
-                  "Guam",
                   "Hawaii",
                   "Iowa",
                   "Idaho",
@@ -80,7 +79,7 @@ const ListOfUSStates = (props) =>{
   */
   const updateUSState = (value) =>{
     props.setUSState(value);
-    getHighSchoolData(value.toLowerCase());
+    getHighSchoolData(value.toLowerCase(),props.setApiData);
     closeMenu();
   }
 
@@ -138,11 +137,10 @@ const ListOfEducationLevels = (props) => {
   })
 
   return(
-    <>
+    <div>
       <NavItem as={Button} variant="link" onClick={openMenu}>
         Education
       </NavItem>
-
 
       <Modal show={visible} onHide={closeMenu}>
         <Modal.Header >
@@ -152,7 +150,7 @@ const ListOfEducationLevels = (props) => {
           {educationLevel}
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   )
 }
 
@@ -167,8 +165,13 @@ const NavigationBar = (props) =>{
       <Navbar.Toggle aria-controls="collapseLinks" />
       <NavbarCollapse id="collapseLinks">
       <Nav>
-        <ListOfUSStates setUSState={(value) => props.setUSState(value)}></ListOfUSStates>
-        <ListOfEducationLevels setEducationLevel={(value) => props.setEducationLevel(value)}></ListOfEducationLevels>
+        <ListOfUSStates 
+          setUSState={(value) => props.setUSState(value)}
+          setApiData={(value) => props.setApiData(value)}
+        ></ListOfUSStates>
+        <ListOfEducationLevels 
+          setEducationLevel={(value) => props.setEducationLevel(value)}
+        ></ListOfEducationLevels>
       </Nav>
       </NavbarCollapse>
     </Navbar>
@@ -183,13 +186,13 @@ const DataSection = (props) =>{
         <h6>{props.level}</h6>
       </header>
       <section id="DataCards">
-        <DataCard title={"Total Students"} value={70000}></DataCard>
-        <DataCard title={"Prekindergarten"} value={1000}></DataCard>
-        <DataCard title={"kindergarten"} value={1000}></DataCard>
-        <DataCard title={"Grades 1-8"} value={1000}></DataCard>
-        <DataCard title={"High Schoolers"} value={1000}></DataCard>
-        <DataCard title={"Dropout Rate"} value={1000}></DataCard>
-        <DataCard title={"Graduation Rate"} value={1000}></DataCard>
+        <DataCard title={"Total Students"} value={props.apiData.TotalStudents}></DataCard>
+        <DataCard title={"Prekindergarten"} value={props.apiData.Prekindergarten}></DataCard>
+        <DataCard title={"kindergarten"} value={props.apiData.Kindergarten}></DataCard>
+        <DataCard title={"Grades 1-8"} value={props.apiData.PreHighSchool}></DataCard>
+        <DataCard title={"High School"} value={props.apiData.HighSchool}></DataCard>
+        <DataCard title={"Dropout Rate"} value={props.apiData.DropoutRate}></DataCard>
+        <DataCard title={"Graduation Rate"} value={props.apiData.GraduationRate}></DataCard>
       </section>
     </section>
   )
@@ -212,33 +215,49 @@ const DataCard = (props) =>{
  * used to get information on high school data
  * @param {*} usState 
  */
-const getHighSchoolData = (usState) =>{
-  fetch(API_URL,{
-    method: 'GET',
-    headers:{
-      'X-Requested-With': 'XMLHttpRequest'
-    }
-  }).then(res => res.json())
-  .then(response => console.log(response))
-  .catch(error => console.error(error));
-  
+const getHighSchoolData = (USState, callback) =>{
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET',API_URL+USState);
+  xhr.onreadystatechange = function(){
+    if(xhr.readyState === XMLHttpRequest.DONE) {
+      var status = xhr.status;
+      if (status === 0 || (status >= 200 && status < 400)) {
+        // The request has been completed successfully
+        console.log(JSON.parse(xhr.responseText));
+        callback(JSON.parse(xhr.responseText));
+        return(xhr.responseText);
+      } else {
+        // Oh no! There has been an error with the request!
+        return(status);
+      }
+  }
 }
+  xhr.send();
+}
+
 
 /**
  * root component
  */
 function App() {
-  let [USState,setUSState] = useState('Georgia');
+  let [USState,setUSState] = useState('Alaska');
   let [educationlevel,setEducationLevel] = useState('k-12')
+  let [apiData,setApiData] = useState({});
+
+  useEffect(() => {
+    //getHighSchoolData(USState.toLowerCase(),(value) => {setApiData(value)});
+  })
+  
   
   return (
     <Container id="App" fluid>
         <NavigationBar 
           setUSState={(value) => setUSState(value)}
           setEducationLevel={(value) => setEducationLevel(value)}
+          setApiData = {(value) => setApiData(value)}
           >
         </NavigationBar>
-        <DataSection title={USState} level={educationlevel}></DataSection>
+        <DataSection title={USState} level={educationlevel} apiData={apiData}></DataSection>
     </Container>
   );
 }
